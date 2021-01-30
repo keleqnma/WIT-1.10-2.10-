@@ -22,6 +22,7 @@ check_in_list = read_chinese_file('Check-inlist.txt')
 checked_names = sys.stdin.readlines()
 for index, ch in enumerate(checked_names):
     checked_names[index] = str(ch).decode('utf-8')
+
 uncheck_list = []
 for name in check_in_list:
     # 移除开头
@@ -86,10 +87,13 @@ for file in files:
                 uncheck_dict[name] = uncheck_dict[name] + 1
             else:
                 uncheck_dict[name] = 1
-uncheck_thre = 5
+
+# 按未打卡次数排序
+uncheck_thre = 7
+sorted_pairs = sorted(uncheck_dict.items(), key=lambda kv: kv[1])
 print ('\n'+"多次未打卡名单".decode('utf-8'))
-for key, value in uncheck_dict.items():
-    if value >= uncheck_thre:
-        print (key, end=' ')
-        print (value, end='')
+for pair in sorted_pairs:
+    if pair[1] >= uncheck_thre:
+        print (pair[0], end=' ')
+        print (pair[1], end='')
         print ("次".decode('utf-8'))
