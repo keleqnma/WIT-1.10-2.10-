@@ -6,6 +6,7 @@ import sys
 import time
 import datetime
 import os
+from datetime import timedelta, datetime
 
 
 def read_chinese_file(filepath):
@@ -28,7 +29,7 @@ for name in check_in_list:
     # 移除开头
     extract_name = name
     for index, ch in enumerate(name):
-        if ch == "@":
+        if ch == " ":
             extract_name = name[index+1:]
             break
 
@@ -46,21 +47,20 @@ for name in check_in_list:
 
 notification = "滴滴滴打卡提示！现在是北京时间："
 output = "，请以下未完成打卡的姑娘尽量完成打卡哦"
-print ("\n\n"+notification.decode('utf-8')+time.strftime(
+print("\n\n"+notification.decode('utf-8')+time.strftime(
     "%Y-%m-%d %H:%M:%S", time.localtime())+output.decode('utf-8'))
 
 for uncheck_name in uncheck_list:
     print('@'+uncheck_name)
 
-# 写入当天打卡记录，判断时间是否早于当天七点，如果早于，则是前一天的打卡
-end_check_time = datetime.datetime.strptime(
-    str(datetime.datetime.now().date())+'7:00', '%Y-%m-%d%H:%M')
+# 写入当天打卡记录，判断时间是否早于当天下午四点，如果早于，则是前一天的打卡
+end_check_time = datetime.strptime(
+    str(datetime.now().date())+'16:00', '%Y-%m-%d%H:%M')
 
-time_now = datetime.datetime.now()
+time_now = datetime.now()
 
 if time_now < end_check_time:
-    check_day = time_now - \
-        datetime.timedelta(days=1).strftime('%Y-%m-%d')
+    check_day = (datetime.today() + timedelta(-1)).strftime('%Y-%m-%d')
 else:
     check_day = time_now.strftime('%Y-%m-%d')
 
@@ -91,9 +91,9 @@ for file in files:
 # 按未打卡次数排序
 uncheck_thre = 7
 sorted_pairs = sorted(uncheck_dict.items(), key=lambda kv: kv[1])
-print ('\n'+"多次未打卡名单".decode('utf-8'))
+print('\n'+"多次未打卡名单".decode('utf-8'))
 for pair in sorted_pairs:
     if pair[1] >= uncheck_thre:
-        print (pair[0], end=' ')
-        print (pair[1], end='')
-        print ("次".decode('utf-8'))
+        print(pair[0], end=' ')
+        print(pair[1], end='')
+        print("次".decode('utf-8'))
