@@ -89,7 +89,7 @@ for file in files:
                 uncheck_dict[name] = 1
 
 # 按未打卡次数排序
-uncheck_thre = 7
+uncheck_thre = len(files)/4 + 1
 sorted_pairs = sorted(uncheck_dict.items(), key=lambda kv: kv[1])
 print('\n'+"多次未打卡名单".decode('utf-8'))
 for pair in sorted_pairs:
