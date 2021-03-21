@@ -17,14 +17,16 @@ def read_chinese_file(filepath):
 def get_stat_dict(keyword, words):
     stat_dict = {}
     len_dict = {}
+    rank_dict = {}
     path = os.getcwd()+'/script/log'
     files = os.listdir(path)
     for file in files:
         if keyword in file:
             lines = read_chinese_file(path + '/' + file)
-            for line in lines:
+            for idx, line in enumerate(lines):
                 key = ""
                 content_len = 0
+                rank = idx-2
                 if keyword == 'unchecked':
                     key = line
                 elif '. ' in line:
@@ -38,8 +40,10 @@ def get_stat_dict(keyword, words):
                 if keyword != 'unchecked':
                     if key in len_dict:
                         len_dict[key] = len_dict[key] + content_len
+                        rank_dict[key] = rank_dict[key] + rank
                     else:
                         len_dict[key] = content_len
+                        rank_dict[key] = rank
     print_dict(stat_dict, words, "次")
     if keyword != 'unchecked':
         avg_len_dict = {}
@@ -47,7 +51,9 @@ def get_stat_dict(keyword, words):
         for key in stat_dict:
             # print(key, len_dict[key], stat_dict[key])
             avg_len_dict[key] = len_dict[key] / stat_dict[key]
+            rank_dict[key] = rank_dict[key]/stat_dict[key]
         print_dict(avg_len_dict, "均打卡字数", "字")
+        print_dict(rank_dict, "打卡位次", "位")
 
 
 def print_dict(stat_dict, words, quantifer):
